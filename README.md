@@ -2,13 +2,13 @@
 
 #### simple-test
 
-[src/resources/pythonSaveModel.py](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/resources/pythonSaveModel.py)
+[src/main/resources/pythonSaveModel.py](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/main/resources/pythonSaveModel.py)
 
 执行该脚本可在指定目录保存model:仅含有简单variable
 
 #### mnist-sotfmax
 
-[src/resources/mnistSoftMax.py](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/resources/mnistSoftMax.py)
+[src/main/resources/mnistSoftMax.py](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/main/resources/mnistSoftMax.py)
 
 执行脚本可在指定目录保存mnist model
 
