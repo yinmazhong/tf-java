@@ -16,7 +16,7 @@ src/resources/mnistSoftMax.py
 
 #### simple-test
 
-[src/main/java/LoadModelSimple.java]()
+[src/main/java/LoadModelSimple.java](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/main/java/LoadModelSimple.java)
 
 加载model并打印variable实例
 
