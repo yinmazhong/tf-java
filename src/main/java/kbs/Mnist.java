@@ -46,6 +46,7 @@ final class Mnist {
     src = maybeLoad(root, base + "-labels-idx1-ubyte.gz");
     // System.out.println("Reading " + src);
     float[][] labels;
+    long[][] intlabels;
     try (DataInputStream in =
         new DataInputStream(
             new GZIPInputStream(new BufferedInputStream(new FileInputStream(src))))) {
@@ -54,15 +55,18 @@ final class Mnist {
       }
       int count = in.readInt();
       labels = new float[num][];
+      intlabels = new long[num][];
       in.skip(skip);
       // System.out.println(String.format("%d-%d/%d labels", skip, skip + num, count));
       for (int i = 0; i < num; i++) {
         labels[i] = new float[10]; // one-shot encoding.
         labels[i][in.readUnsignedByte()] = 1f;
+        intlabels[i] = new long[10]; // one-shot encoding.
+        intlabels[i][in.readUnsignedByte()] = 1;
       }
     }
 
-    return new Mnist(images, labels);
+    return new Mnist(images, intlabels);
   }
 
   float[][] images() {
@@ -74,10 +78,20 @@ final class Mnist {
     // modifiable but ok for PoC
     return labels;
   }
+  long[][] intlabels() {
+    // modifiable but ok for PoC
+    return intlabels;
+  }
 
   private Mnist(float[][] images, float[][] labels) {
     this.images = images;
     this.labels = labels;
+    this.intlabels = null;
+  }
+  private Mnist(float[][] images, long[][] intlabels) {
+    this.images = images;
+    this.labels = null;
+    this.intlabels = intlabels;
   }
 
   private static File maybeLoad(File root, String file) throws IOException {
@@ -97,6 +111,7 @@ final class Mnist {
 
   private final float[][] images;
   private final float[][] labels;
+  private final long[][] intlabels;
 
   private static final String BASE_URL = "http://yann.lecun.com/exdb/mnist/";
 }

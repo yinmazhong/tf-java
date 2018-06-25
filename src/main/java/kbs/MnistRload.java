@@ -5,6 +5,7 @@ import org.tensorflow.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.FloatBuffer;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -17,28 +18,32 @@ public class MnistRload {
         final int NUM_PREDICTIONS = 1;
 
         /* load the model Bundle */
-        SavedModelBundle bundle = SavedModelBundle.load("/tmp/mnist/model/1620", "serve");
+        SavedModelBundle bundle = SavedModelBundle.load("/tmp/mnist/model/1815", "serve");
+
 
         // create the session from the Bundle
         //Session sess = b.session();
 
-        try (Graph g = new Graph();
+        try (Graph g = bundle.graph();
              Session sess = bundle.session();) {
-
-            Ops ops = Ops.create(g);
+            Iterator<Operation> operations = g.operations();
+            while (operations.hasNext()){
+                System.out.println(operations.next().name());
+            }
+           // Ops ops = Ops.create(g);
 
             // Create the model
-            Input x = ops.placeholder(DataType.FLOAT, Shape.make(-1, 784));
+           // Input x = ops.placeholder(DataType.FLOAT, Shape.make(-1, 784));
 //            Input x = ops.placeholder(DataType.INT64, Shape.make(-1, 784));
-            Input weight = ops.variable(zeros(784, 10));
+           /* Input weight = ops.variable(zeros(784, 10));
             Input b = ops.variable(new float[10]);
-            Input y = ops.math().add(ops.math().matMul(x, weight), b);
+            Input y = ops.math().add(ops.math().matMul(x, weight), b);*/
 
             // Loss
-            Input y_ = ops.placeholder(DataType.INT64, Shape.make(-1, 10));
+            //Input y_ = ops.placeholder(DataType.INT64, Shape.make(-1, 10));
 //            Input y_ = ops.placeholder(DataType.FLOAT, Shape.make(-1, 10));
-            Input cross_entropy =
-                    ops.math().mean(ops.nn().softmaxCrossEntropyWithLogits(y, y_).loss(), ops.constant(0));
+            /*Input cross_entropy =
+                    ops.math().mean(ops.nn().softmaxCrossEntropyWithLogits(y, y_).loss(), ops.constant(0));*/
 
             /*for (int i = 0; i < 100; i++) {
                 Mnist mnist = Mnist.loadTrain(new File("mnist_data"), i * 100, 100);
@@ -55,15 +60,18 @@ public class MnistRload {
             }*/
             Mnist mnist = Mnist.loadTrain(new File("mnist_data"), 100, 100);
             try (Tensor xs = Tensor.create(mnist.images());
-                 Tensor ys_ = Tensor.create(mnist.labels());) {
-                float[] yOut = sess.runner()
-                        .feed(x.asOutput(), xs)
-                        .feed(y_.asOutput(), ys_)
-                        .fetch("y")
+                 Tensor ys_ = Tensor.create(mnist.intlabels());) {
+                long[] y = sess.runner()
+                        .feed("x", xs)
+                        .feed("y_", ys_)
+                        .fetch("pred")
                         .run()
                         .get(0)
-                        .copyTo(new float[NUM_PREDICTIONS]);
-                System.out.println(yOut[0]);
+                        .copyTo(new long[100]);
+                for (int i=0;i<100;i++){
+
+                    System.out.println(y[i]);
+                }
             }
 
             /*float[] y = sess.runner()
