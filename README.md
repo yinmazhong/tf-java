@@ -16,12 +16,12 @@ src/resources/mnistSoftMax.py
 
 #### simple-test
 
-src/java/LoadModelSimple.java
+[src/main/java/LoadModelSimple.java]()
 
 加载model并打印variable实例
 
 #### mnist-sotfmax
 
-src/java/kbs/MnistRload.java
+[src/main/java/kbs/MnistRload.java](http://52.80.92.184/xianhong.xu/tensorflow-model-loader-jvm/blob/master/src/main/java/kbs/MnistRload.java)
 
 现在测试可以加载model,加载输入数据，但是计算过程中有数据类型不一致问题，正在研究解决
