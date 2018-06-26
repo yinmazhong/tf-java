@@ -58,7 +58,7 @@ public class MnistRload {
                                     .run());
                 }
             }*/
-            Mnist mnist = Mnist.loadTrain(new File("mnist_data"), 100, 100);
+            Mnist mnist = Mnist.loadTrain(new File("mnist_data"), 100, 10);
             try (Tensor xs = Tensor.create(mnist.images());
                  Tensor ys_ = Tensor.create(mnist.intlabels());) {
                 long[] y = sess.runner()
@@ -67,8 +67,8 @@ public class MnistRload {
                         .fetch("pred")
                         .run()
                         .get(0)
-                        .copyTo(new long[100]);
-                for (int i=0;i<100;i++){
+                        .copyTo(new long[10]);
+                for (int i=0;i<10;i++){
 
                     System.out.println(y[i]);
                 }
